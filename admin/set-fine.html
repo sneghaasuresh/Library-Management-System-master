@@ -1,52 +1,4 @@
-<?php
-session_start();
-error_reporting(0);
-include('includes/config.php');
-if(strlen($_SESSION['alogin'])==0)
-    {   
-header('location:index.php');
-}
-else{ 
 
-if(isset($_POST['update']))
-{
-$fine=$_POST['finetf'];
-
-$sql ="SELECT fine from tblfine ";
-$query = $dbh -> prepare($sql);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-$listedbooks=$query->rowCount();
-if($listedbooks==0)
-{
-$sql="insert into tblfine values(:fine)";
-$query = $dbh->prepare($sql);
-$query->bindParam(':fine',$fine,PDO::PARAM_STR);
-$query->execute();
-$lastInsertId = $dbh->lastInsertId();
-}
-else
-{	
-$sql="update tblfine set fine=:fine where 1";
-$query = $dbh->prepare($sql);
-$query->bindParam(':fine',$fine,PDO::PARAM_STR);
-$query->execute();
-$lastInsertId = $dbh->lastInsertId();
-}
-
-if($lastInsertId)
-{
-$_SESSION['msg']="Fine Updated successfully";
-header('location:set-fine.php');
-}
-else 
-{
-$_SESSION['error']="Something went wrong. Please try again";
-header('location:set-fine.php');
-}
-
-}
-?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -113,4 +65,4 @@ Fine Update Section
     <script src="assets/js/custom.js"></script>
 </body>
 </html>
-<?php } ?>
+

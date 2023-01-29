@@ -1,43 +1,4 @@
-<?php
-session_start();
-error_reporting(0);
-include('includes/config.php');
-if(strlen($_SESSION['alogin'])==0)
-    {   
-header('location:index.php');
-}
-else{ 
 
-if(isset($_POST['issue']))
-{
-
-$studentid=strtoupper($_POST['studentid']);
-$bookid=$_POST['bookdetails'];
-$sql="INSERT INTO  tblissuedbookdetails(StudentID,BookId) VALUES(:studentid,:bookid)";
-$query = $dbh->prepare($sql);
-$query->bindParam(':studentid',$studentid,PDO::PARAM_STR);
-$query->bindParam(':bookid',$bookid,PDO::PARAM_STR);
-$query->execute();
-$lastInsertId = $dbh->lastInsertId();
-
-$bookid=$_GET['ISBNNumber'];
-$studentid=$_GET['StudentID'];
-$sql="DELETE FROM tblrequestedbookdetails WHERE StudentID=:studentid and ISBNNumber=:bookid";
-$query = $dbh->prepare($sql);
-$query -> bindParam(':studentid',$studentid, PDO::PARAM_STR);
-$query -> bindParam(':bookid',$bookid, PDO::PARAM_STR);
-$query->execute();
-
-$sql="update tblbooks set IssuedCopies=IssuedCopies+1 where ISBNNumber=:bookid";
-$query = $dbh->prepare($sql);
-$query->bindParam(':bookid',$bookid,PDO::PARAM_STR);
-$query->execute();
-
-$_SESSION['msg']="Book issued successfully";
-header('location:manage-issued-books.php');
-
-}
-?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -171,4 +132,4 @@ else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlen
 
 </body>
 </html>
-<?php } ?>
+

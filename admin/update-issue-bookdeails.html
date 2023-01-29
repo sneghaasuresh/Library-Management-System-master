@@ -1,40 +1,4 @@
-<?php
-session_start();
-error_reporting(0);
-include('includes/config.php');
-if(strlen($_SESSION['alogin'])==0)
-    {   
-header('location:index.php');
-}
-else{ 
-$status=$_GET['status'];
-$days=$_GET['days'];
-if(isset($_POST['return']))
-{
-$rid=intval($_GET['rid']);
-$fine=$_POST['fine'];
-$ISBNNumber=$_GET['ISBNNumber'];
 
-$rstatus=1;
-$sql="update tblissuedbookdetails set fine=:fine,ReturnStatus=:rstatus where id=:rid";
-$query = $dbh->prepare($sql);
-$query->bindParam(':rid',$rid,PDO::PARAM_STR);
-$query->bindParam(':fine',$fine,PDO::PARAM_STR);
-$query->bindParam(':rstatus',$rstatus,PDO::PARAM_STR);
-$query->execute();
-
-$sql="update tblbooks set IssuedCopies=IssuedCopies-1 where ISBNNumber=:ISBNNumber";
-$query = $dbh->prepare($sql);
-$query->bindParam(':ISBNNumber',$ISBNNumber,PDO::PARAM_STR);
-$query->execute();
-
-$_SESSION['msg']="Book Returned successfully";
-header('location:manage-issued-books.php');
-
-
-}
-}
-?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -125,7 +89,7 @@ $cnt=1;
 if($query->rowCount() > 0)
 {
 foreach($results as $result)
-{               ?>                                      
+{                                                    
                    
 
 
